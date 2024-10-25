@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeremy文轩的个人网站</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+        }
+        header {
+            background: #35424a;
+            color: white;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header h1 {
+            margin: 0;
+            text-align: center;
+        }
+        nav {
+            display: flex;
+            background-color: transparent;
+            padding: 0;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            margin-right: 10px;
+        }
+        nav a:hover {
+            background: #e8491d;
+        }
+        .site-title {
+            text-align: center;
+            flex-grow: 1;
+        }
+        .search-container {
+            display: flex;
+            margin: 0;
+        }
+        #search-input {
+            padding: 5px;
+            font-size: 14px;
+            border: none;
+            border-radius: 4px 0 0 4px;
+        }
+        #search-button {
+            padding: 5px 10px;
+            background-color: #e8491d;
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+        #search-button:hover {
+            background-color: #ff5722;
+        }
+        #search-results {
+            margin-top: 20px;
+        }
+        .search-result {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        .search-result h3 {
+            margin-top: 0;
+        }
+        .search-result p {
+            margin-bottom: 5px;
+        }
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+
+        /* 添加轮播图样式 */
+        .slideshow-container {
+            max-width: 1000px;
+            position: relative;
+            margin: auto;
+        }
+
+        .mySlides {
+            display: none;
+        }
+
+        .mySlides img {
+            width: 100%;
+            height: auto;
+        }
+
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            margin-top: -22px;
+            padding: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            transition: 0.6s ease;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .prev:hover, .next:hover {
+            background-color: rgba(0,0,0,0.9);
+        }
+
+        .about-content {
+            display: flex;
+            align-items: flex-start;
+            margin-top: 20px;
+        }
+
+        .profile-image {
+            width: 200px;
+            height: auto;
+            border-radius: 50%;
+            margin-right: 30px;
+        }
+
+        .about-text {
+            flex: 1;
+        }
+
+        .about-text h3 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .about-text h4 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #444;
+        }
+
+        .about-text ul {
+            padding-left: 20px;
+        }
+
+        .about-text p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            color: #333;
+            font-size: 30px;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: #e8491d;
+        }
+
+        .article-controls {
+            margin-bottom: 20px;
+        }
+
+        .article-controls button {
+            padding: 10px 15px;
+            margin-right: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .article-controls button:hover {
+            background-color: #45a049;
+        }
+
+        #new-article-form, #upload-article-form {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+
+        #article-form input, #article-form textarea, #upload-form input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        #article-form textarea {
+            height: 200px;
+        }
+
+        #article-form button, #upload-form button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        #article-form button:hover, #upload-form button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="#home" class="nav-link">首页</a>
+            <a href="#about" class="nav-link">关于我</a>
+            <a href="#articles" class="nav-link">文章</a>
+            <a href="#contact" class="nav-link">联系我</a>
+        </nav>
+        <h1 class="site-title">Jeremy文轩的个人网站</h1>
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="搜索...">
+            <button id="search-button">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div id="home" class="page">
+            <h2>欢迎来到Jeremy文轩的个人网站</h2>
+            <p>这里是首页内容...</p>
+            
+            <!-- 轮播图部分保不变 -->
+            <div class="slideshow-container">
+                <div class="mySlides">
+                    <img src="./images/image1.jpg" alt="个人照片1">
+                </div>
+                <div class="mySlides">
+                    <img src="./images/image2.jpg" alt="个人照片2">
+                </div>
+                <div class="mySlides">
+                    <img src="./images/image3.jpg" alt="个人照片3">
+                </div>
+                <div class="mySlides">
+                    <img src="./images/image4.jpg" alt="个人照片4">
+                </div>
+                <div class="mySlides">
+                    <img src="./images/image5.jpg" alt="个人照片5">
+                </div>
+                <div class="mySlides">
+                    <img src="./images/image6.jpg" alt="个人照片6">
+                </div>
+                <div class="mySlides">
+                    <img src="./images/image7.jpg" alt="个人照片7">
+                </div>
+                <div class="mySlides">
+                    <img src="./images/image8.jpg" alt="个人照片8">
+                </div>
+                <div class="mySlides">
+                    <img src="./images/image9.jpg" alt="个人照片9">
+                </div>
+                <div class="mySlides">
+                    <img src="./images/image10.jpg" alt="个人照片10">
+                </div>
+
+                <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                <a class="next" onclick="plusSlides(1)">&#10095;</a>
+            </div>
+        </div>
+
+        <div id="about" class="page">
+            <h2>关于我</h2>
+            <div class="about-content">
+                <img src="./images/image1.jpg" alt="Jeremy文轩的照片" class="profile-image">
+                <div class="about-text">
+                    <h3>Jeremy文轩</h3>
+                    <p>生物医学工程 | 大学生 | 科研爱好者</p>
+                    <h4>教育背景</h4>
+                    <p>南方医科大学 生物医学工程专业 本科在读</p>
+                    <h4>技能</h4>
+                    <ul>
+                        <li>生物医学信号处理</li>
+                        <li>医学图像分析</li>
+                        <li>机器学习算法应用</li>
+                        <li>Python编程</li>
+                        <li>MATLAB数据分析</li>
+                    </ul>
+                    <h4>研究兴趣</h4>
+                    <p>我对生物医学工程领域充满热情，特别关注人工智能在医疗诊断和治疗中的应用。目前，我正在探索深度学习算法在医学图像分析中的潜力，希望能为早期疾病诊断做出贡献。</p>
+                    <h4>个人简介</h4>
+                    <p>作为一名生物医学工程专业的学生，我热衷于将工程技术与医学知识相结合，探索创新的医疗解决方案。在学习过程中，我不仅注重理论知识的积累，还积极参与实践项目，努力将所学应用于解决实际问题。我相信，通过不断学习探索，我们可以为改善人类健康做出重要贡献。</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="articles" class="page">
+            <h2>文章</h2>
+            <div class="article-controls">
+                <button id="new-article-btn">新建文章</button>
+                <button id="upload-article-btn">上传文章</button>
+            </div>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="搜索文章...">
+                <button id="search-button">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            <div id="search-results"></div>
+            <div id="articles-list">
+                <!-- 文章列表将在这里动态生成 -->
+            </div>
+
+            <!-- 新建文章表单 -->
+            <div id="new-article-form" style="display: none;">
+                <h3>新建文章</h3>
+                <form id="article-form">
+                    <input type="text" id="article-title" placeholder="文章标题" required>
+                    <textarea id="article-content" placeholder="文章内容" required></textarea>
+                    <button type="submit">保存文章</button>
+                </form>
+            </div>
+
+            <!-- 上传文章表单 -->
+            <div id="upload-article-form" style="display: none;">
+                <h3>上传文章</h3>
+                <form id="upload-form">
+                    <input type="file" id="article-file" accept=".txt,.md,.doc,.docx" required>
+                    <button type="submit">上传文章</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="contact" class="page">
+            <h2>联系我</h2>
+            <p>欢迎通过以下方式与我联系：</p>
+            <div class="social-icons">
+                <a href="#" target="_blank" title="小红书"><i class="fab fa-weibo"></i></a>
+                <a href="#" target="_blank" title="微博"><i class="fab fa-weibo"></i></a>
+                <a href="#" target="_blank" title="微信公众号"><i class="fab fa-weixin"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('search-input');
+            const searchButton = document.getElementById('search-button');
+            const searchResults = document.getElementById('search-results');
+            const articlesList = document.getElementById('articles-list');
+
+            // 模拟文章数据
+            const articles = [
+                { title: "生物医学研究的新进展", content: "这篇文章讨论了生物医学领域的最新研究成果..." },
+                { title: "大学生活体验", content: "分享我作为一名生物医学专业学生的日常生活..." },
+                { title: "科研方法论", content: "探讨了进行科学研究的有效方法和技巧..." }
+            ];
+
+            function performSearch() {
+                const query = searchInput.value.toLowerCase();
+                const results = articles.filter(article => 
+                    article.title.toLowerCase().includes(query) || 
+                    article.content.toLowerCase().includes(query)
+                );
+
+                displayResults(results);
+            }
+
+            function displayResults(results) {
+                searchResults.innerHTML = '';
+                if (results.length === 0) {
+                    searchResults.innerHTML = '<p>未找到相关文章，请尝试其他关键词。</p>';
+                    return;
+                }
+
+                results.forEach(article => {
+                    const resultElement = document.createElement('div');
+                    resultElement.className = 'search-result';
+                    resultElement.innerHTML = `
+                        <h3>${article.title}</h3>
+                        <p>${article.content.substring(0, 100)}...</p>
+                    `;
+                    searchResults.appendChild(resultElement);
+                });
+            }
+
+            function displayAllArticles() {
+                articlesList.innerHTML = '';
+                articles.forEach(article => {
+                    const articleElement = document.createElement('div');
+                    articleElement.className = 'search-result';
+                    articleElement.innerHTML = `
+                        <h3>${article.title}</h3>
+                        <p>${article.content.substring(0, 100)}...</p>
+                    `;
+                    articlesList.appendChild(articleElement);
+                });
+            }
+
+            searchButton.addEventListener('click', performSearch);
+            searchInput.addEventListener('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    performSearch();
+                }
+            });
+
+            // 单页面应用导航
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pages = document.querySelectorAll('.page');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    pages.forEach(page => {
+                        page.classList.remove('active');
+                    });
+                    document.getElementById(targetId).classList.add('active');
+
+                    if (targetId === 'articles') {
+                        displayAllArticles();
+                    }
+                });
+            });
+
+            // 默认显示首页
+            document.getElementById('home').classList.add('active');
+        });
+
+        // 添加轮播图脚本
+        let slideIndex = 1;
+        showSlides(slideIndex);
+
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        function showSlides(n) {
+            let i;
+            let slides = document.getElementsByClassName("mySlides");
+            if (n > slides.length) {slideIndex = 1}
+            if (n < 1) {slideIndex = slides.length}
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            slides[slideIndex-1].style.display = "block";
+        }
+
+        // 自动播放轮播图
+        setInterval(() => {
+            plusSlides(1);
+        }, 3000); // 每3秒切换一次图片
+
+        // 新建和上传文章功能
+        const newArticleBtn = document.getElementById('new-article-btn');
+        const uploadArticleBtn = document.getElementById('upload-article-btn');
+        const newArticleForm = document.getElementById('new-article-form');
+        const uploadArticleForm = document.getElementById('upload-article-form');
+        const articleForm = document.getElementById('article-form');
+        const uploadForm = document.getElementById('upload-form');
+
+        newArticleBtn.addEventListener('click', () => {
+            newArticleForm.style.display = 'block';
+            uploadArticleForm.style.display = 'none';
+        });
+
+        uploadArticleBtn.addEventListener('click', () => {
+            uploadArticleForm.style.display = 'block';
+            newArticleForm.style.display = 'none';
+        });
+
+        articleForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const title = document.getElementById('article-title').value;
+            const content = document.getElementById('article-content').value;
+            articles.push({ title, content });
+            displayAllArticles();
+            newArticleForm.style.display = 'none';
+            articleForm.reset();
+        });
+
+        uploadForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const file = document.getElementById('article-file').files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const content = e.target.result;
+                    articles.push({ title: file.name, content });
+                    displayAllArticles();
+                    uploadArticleForm.style.display = 'none';
+                    uploadForm.reset();
+                };
+                reader.readAsText(file);
+            }
+        });
+    </script>
+</body>
+</html>
